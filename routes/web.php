@@ -32,7 +32,7 @@ Route::get('/', function(Request $request) {
     }
 
     return view('welcome', compact('works', 'sort', 'limit', 'totalWorks'));
-});
+})->name('home');
 
 // AUTH routes (Breeze/Fortify/Jetstream или свои)
 // Страница логина
@@ -81,6 +81,27 @@ Route::middleware('auth')->group(function () {
         return response()->noContent();
     })->middleware('auth')->name('works.view');
 });
+
+// админские штуки
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/admin', [\App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/admin/users', [\App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
+});
+
+Route::get('/profile/admin/games', [\App\Http\Controllers\AdminController::class, 'games'])->name('admin.games');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/admin/games', [\App\Http\Controllers\AdminController::class, 'gamesPage'])->name('admin.games');
+});
+Route::post('/profile/admin/games', [\App\Http\Controllers\AdminController::class, 'storeGame'])->name('admin.games.store');
+Route::post('/profile/admin/product-types', [\App\Http\Controllers\AdminController::class, 'storeProductType'])->name('admin.product_types.store');
+Route::post('/profile/admin/servers', [\App\Http\Controllers\AdminController::class, 'storeServer'])->name('admin.servers.store');
+
+
+
 
 // Публичный профиль по логину — всегда В САМОМ НИЗУ
 Route::get('/{login}', [ProfileController::class, 'showByLogin'])->name('profile.bylogin');

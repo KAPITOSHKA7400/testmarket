@@ -45,7 +45,11 @@ class AuthenticatedSessionController extends Controller
         \Illuminate\Support\Facades\Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->intended(\App\Providers\RouteServiceProvider::HOME);
+        // ВАЖНО: вот этот редирект — он ОДИН!
+        return redirect()->intended(
+            $user->role === 'admin' ? '/profile/admin' : '/profile'
+        );
+//        return redirect()->intended(\App\Providers\RouteServiceProvider::HOME);
     }
 
 

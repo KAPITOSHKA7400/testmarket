@@ -11,6 +11,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Str;
 use App\Models\Work;
 use App\Models\Like;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -96,6 +97,28 @@ class ProfileController extends Controller
         // Удаление аватарки
         if ($request->has('remove_avatar') && $request->remove_avatar) {
             $user->avatar = null;
+        }
+
+        // баннер для профиля
+        if ($request->hasFile('user_banner')) {
+            $path = $request->file('user_banner')->store('banners', 'public');
+            $user->user_banner = $path;
+        }
+
+        $request->validate([
+            'user_banner' => [
+                'nullable',
+                'image',
+                'mimes:jpg,webp',
+                'dimensions:width=1390,height=250',
+            ],
+        ]);
+
+        if ($request->has('remove_user_banner')) {
+            if ($user->user_banner && Storage::disk('public')->exists($user->user_banner)) {
+                Storage::disk('public')->delete($user->user_banner);
+            }
+            $user->user_banner = null;
         }
 
         $user->save();

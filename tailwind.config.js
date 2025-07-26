@@ -10,6 +10,10 @@ export default {
         './resources/views/**/*.blade.php',
     ],
 
+    safelist: [
+        'dark:border-avatar-dark',
+    ],
+
     theme: {
         extend: {
             fontFamily: {
@@ -19,4 +23,5 @@ export default {
     },
 
     plugins: [forms],
+
 };

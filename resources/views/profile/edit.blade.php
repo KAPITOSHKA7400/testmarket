@@ -1,16 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-6xl mx-auto mt-10 bg-white dark:bg-gray-900 p-8 rounded-xl shadow">
-        <!-- Верхний блок профиля и меню -->
-        <div class="flex flex-col items-center mb-6">
-            <img src="{{ Auth::user()->avatar ?? 'https://randomuser.me/api/portraits/men/12.jpg' }}"
-                 alt="Аватар"
-                 class="w-20 h-20 rounded-full object-cover border-4 border-gray-300 dark:border-gray-700 shadow mb-3">
-            <div class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                {{ Auth::user()->login }}
-            </div>
-        </div>
+    <div class="mx-auto p-6 bg-white dark:bg-[#151920] rounded-xl shadow">
 
         <!-- Верхнее меню -->
         @include('profile._edit_nav')
@@ -28,7 +19,7 @@
                     <img src="{{ Auth::user()->avatar ?? 'https://via.placeholder.com/80x80?text=Avatar' }}" alt="Avatar"
                          class="w-20 h-20 rounded-full object-cover border border-gray-300 dark:border-gray-700">
                     <div class="flex flex-col gap-2">
-                        <input type="file" name="avatar" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100" accept="image/*">
+                        <input type="file" name="avatar" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-300 file:text-blue-700 hover:file:bg-blue-200" accept="image/*">
                         @if(Auth::user()->avatar)
                             <label class="inline-flex items-center cursor-pointer mt-2">
                                 <input type="checkbox" name="remove_avatar" value="1" class="form-checkbox text-red-600">
@@ -40,6 +31,31 @@
                 @error('avatar')
                 <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
                 @enderror
+            </div>
+
+            <!-- Баннер -->
+            <div class="mb-4">
+                <label class="block mb-2 font-medium text-gray-700 dark:text-gray-200">Баннер профиля</label>
+                <div class="flex flex-col gap-3">
+                    @if(Auth::user()->user_banner)
+                        <img src="{{ asset('storage/' . Auth::user()->user_banner) }}"
+                             alt="Баннер"
+                             class="w-full max-w-3xl h-[140px] object-cover border border-gray-300 dark:border-gray-700 rounded-lg shadow">
+
+                        <label class="inline-flex items-center cursor-pointer mt-1">
+                            <input type="checkbox" name="remove_user_banner" value="1" class="form-checkbox text-red-600">
+                            <span class="ml-2 text-red-600 text-sm">Удалить баннер</span>
+                        </label>
+                    @endif
+
+                    <input type="file" name="user_banner"
+                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-300 file:text-blue-700 hover:file:bg-blue-200"
+                           accept=".jpg,.webp">
+
+                    @error('user_banner')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Логин (только для чтения) -->

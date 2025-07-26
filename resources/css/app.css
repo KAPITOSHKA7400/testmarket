@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .dark\:border-avatar-dark {
+        @apply border;
+        border-color: #151920 !important;
+    }
+}
+
+.border-avatar-dark {
+    border-color: #151920 !important;
+}
